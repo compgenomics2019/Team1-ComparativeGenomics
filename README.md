@@ -3,7 +3,7 @@ This pipeline is designed by comparative genomic team of group 1, to analyse gen
 ## Script Guidline
 ### Requirements
 **1.** python3  <br />
-**2.** mentalist needs to be on your path.
+**2.** mentalist needs to be on your path <br /> 
 **3.** pandas install <br /> 
 ### Quick start
 ~~~~
