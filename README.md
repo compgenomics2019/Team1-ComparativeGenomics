@@ -9,8 +9,8 @@ This pipeline is designed by comparative genomic team of group 1, to analyse gen
 ~~~~
 git clone https://github.gatech.edu/compgenomics2019/Team1-ComparativeGenomics.git
 cd Team1-ComparativeGenomics 
-To run cgMLST: ./comparativePipeline.py -m - i<name of input> -o <name of output> -db <name of database>
-To calculate difference for cgMLST: ./comparativePipeline.py -diff -i <name of cgMLST output>
+To run cgMLST: ./comparativePipeline.py (or python comparativePipeline.py ) -m - i<name of input> -o <name of output> -db <name of database>
+To calculate difference for cgMLST: ./comparativePipeline.py (or python comparativePipeline.py) -diff -i <name of cgMLST output>
 ~~~~
 #### Arguments
 `-i `: name of input file <br />
