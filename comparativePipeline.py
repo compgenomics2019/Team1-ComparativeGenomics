@@ -37,7 +37,7 @@ def main():
         if args.database == None:
             raise SystemExit("missing database to run mentalist. Exit")
         if args.inputFile==None:
-            raise SystemExit("missing input file to run mentalist. Exit")
+            raise SystemExit("missing input sample file to run mentalist. Exit")
         if args.outFile==None:
             raise SystemExit("missing output name to run mentalist. Exit")
         else:
