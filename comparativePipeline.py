@@ -20,8 +20,11 @@ def dropColumns(inFile,outFile):
     file.to_csv(outFile,sep=',',index=False)     ### write into csv
 def cgMLST_call(inFile,outFile,dbFile):
     #note: mentalist has to be on your path
-    subprocess.call(['mentalist','call','-o',outFile,"--db",dbFile,"-i",inFile])
- 
+    command="mentalist call -i {} -o {} --db {}".format(inFile,outFile,dbFile)    
+    #print(command)
+    #subprocess.run(command)
+    #subprocess.call(['mentalist','call','-o',outFile,"--db",dbFile,"-i",inFile])
+    subprocess.call(command,shell=True)
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-m", "--mlst",action="store_true", help="running mentalist")
