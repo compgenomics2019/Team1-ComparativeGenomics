@@ -37,8 +37,8 @@ def main():
             raise SystemExit("missing input file to run mentalist. Exit")
         if args.outFile==None:
             raise SystemExit("missing output name to run mentalist. Exit")
-        #else:
-            #cgMLST_call(args.inputFile,args.outFile,args.database)
+        else:
+            cgMLST_call(args.inputFile,args.outFile,args.database)
     if args.diff:
         if args.inputFile==None:
             raise SystemExit("missing the result file of cgMLST calling to calculate the differences. Exit")
