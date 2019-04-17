@@ -7,6 +7,10 @@ This pipeline is designed by comparative genomic team of group 1, to analyse gen
 **3.** pandas install <br /> 
 ### Quick start
 ~~~~
+Mentalist installation: 
+The instruction of installing Mentalist is described from the website https://github.com/WGS-TB/MentaLiST
+~~~~
+~~~~
 git clone https://github.gatech.edu/compgenomics2019/Team1-ComparativeGenomics.git
 cd Team1-ComparativeGenomics 
 To run cgMLST: ./comparativePipeline.py (or python comparativePipeline.py ) -m - i<name of input> -o <name of output> -db <name of database>
