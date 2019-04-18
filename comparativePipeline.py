@@ -10,14 +10,15 @@ def kSNP3(inFile, outDir):
     ## Automatically create in file, makefasta, kchooser for user and run kSNP3
     input_path = os.path.abspath(inFile)
     file_head = input_path.split('/')[::-1]
+    # Creates input file, which is just a list of all of the genome file paths
     MakeKSNPin = "MakeKSNP3infile {} {}_infile A".format(input_path, file_head)
     subprocess.call(MakeKSNPin, shell=True)
-	
+    # Concatenates all genomic files for a fasta to optimize k-mer length
     makeFASTA = "MakeFasta {}_infile {}.fasta".format(file_head, file_head)
     subprocess.call(makeFASTA, shell=True)
-	
+    # Optimize k-mer length
     kCHOOSE_r = "Kchooser {}.fasta".format(file_head)
-
+    subprocess.call(kCHOOSE_r, shell=True)
     # Parse Kchooser.report for optimal k-value
     dir_kc = os.getcwd()
     file_hand = open('dir_kc/Kchooser.report', 'r')
@@ -25,18 +26,13 @@ def kSNP3(inFile, outDir):
     for i in file_hand:
         if i.startswith('When'):
             k_val = int(i.split()[3])
-    print("Your optimum k-mer length is: {}\n".format(k_val))
-    print("Review Kchooser.report for more details..")
-	
+    file_hand.close()
+    # Run kSNP3 given input file and optimal k-mer length
     k_script = "kSNP3 -in {}_infile -outdir {} -k {} -ML | tee {}_log".format(file_head, fileOut, k_val, file_head)
-
     subprocess.call(k_script, shell=True)
-
-
-
 	
 def MASH(inFile):
-    ## Translate this into a script
+    ## Compute MASH distance while querying to find potentially related strains
     input_path = os.path.abspath(inFile)
     for file in os.listdir(input_path):
         mash_cmd = "mash dist refseq.genomes.k21s1000.msh {} > distances_{}.tab".format(file, file.split('.')[0])
@@ -94,7 +90,6 @@ def main():
 	if args.outFile==None:
 	    raise SystemExit("Please specify an output directory")
 	kSNP3(args.inFile, args.outFile)
-	
     if args.mash:
         if args.inFile==None:
             raise SystemExit("Please specify an input directory containing your genomes of analysis")
