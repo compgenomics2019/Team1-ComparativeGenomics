@@ -5,26 +5,31 @@ import subprocess
 import sys
 import pandas as pd
 import createDiffMatrix
-def kchoose(Kchooser):
-    # Opens Kchooser.report to find optimum k-mer value from Kchooser kSNP3 script 
-	dir_kc = os.getcwd()
-	file_hand = open('dir_kc/Kchooser.report', 'r')
-	k_val = 0
-	for i in file_hand:
-		if i.startswith('When'):
-			if int(i.split()[3]) > k_val:
-				k_val = int(i.split()[3])
-            
-	print("Your optimum k-mer length is: {}\n".format(k_val))
-	print("Review Kchooser.report for more details..")
-	
-	return(k_val)
 
-def kSNP3():
-    ## <subprocess for various utility commands>
-    ## Test in gabriel_
-    ## :)
-    
+def kSNP3(inFile, outDir):
+    ## Automatically create in file, makefasta, kchooser for user and run kSNP3
+    input_path = os.path.abspath(inFile)
+    file_head = input_path.split('/')[::-1]
+    MakeKSNPin = "MakeKSNP3infile {} {}_infile A".format(input_path, file_head)
+    subprocess.call(MakeKSNPin, shell=True)
+	
+    makeFASTA = "MakeFasta {}_infile {}.fasta".format(file_head, file_head)
+    subprocess.call(makeFASTA, shell=True)
+	
+    kCHOOSE_r = "Kchooser {}.fasta".format(file_head)
+
+    dir_kc = os.getcwd()
+    file_hand = open('dir_kc/Kchooser.report', 'r')
+    k_val = 0
+    for i in file_hand:
+        if i.startswith('When'):
+            if int(i.split()[3]) > k_val:
+                k_val = int(i.split()[3])
+    print("Your optimum k-mer length is: {}\n".format(k_val))
+    print("Review Kchooser.report for more details..")
+	
+    ## kSNP3
+	
 def MASH():
     ## Translate this into a script
     '''
@@ -57,9 +62,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-m", "--mlst",action="store_true", help="running mentalist")
     parser.add_argument("-diff",action="store_true", help="calculate differences from cgMLST results")
-    parser.add_argument("-i", "--inputFile",help="the path of input File")
-    parser.add_argument("-o", "--outFile" ,help="path of output file ") 
+    parser.add_argument("-i", "--inputFile",help="the path of input file")
+    parser.add_argument("-o", "--outFile" ,help="path of output file/directory") 
     parser.add_argument("-db", "--database", help="path of database for cgMLST ") 
+    parser.add_argument("-k", "--ksnp", action="store_true", help="running kSNP3")
     args = parser.parse_args()
     if args.mlst:
         if args.database == None:
@@ -74,5 +80,11 @@ def main():
         if args.inputFile==None:
             raise SystemExit("missing the result file of cgMLST calling to calculate the differences. Exit")
         calDifference(args.inputFile)
+    if args.ksnp:
+        if args.inFile==None:
+            raise SystemExit("Please specify an input directory containing your genomes of analysis")
+	if args.outFile==None:
+	    raise SystemExit("Please specify an output directory")
+	kSNP3(args.inFile, args.outFile)
 if __name__ == "__main__":
     main()
