@@ -30,6 +30,8 @@ To calculate difference for cgMLST: ./comparativePipeline.py (or python comparat
 #### Arguments
 `-i `: name of input file <br />
 `-o `: name of output file <br />
-`-m `:to run cgMLST <br />
+`-m `: to run cgMLST <br />
 `-diff`: to calculate differences for cgMLST result<br />
+`-k `: to run kSNP3 <br />
+`-mash `: to run MASH <br />
 
