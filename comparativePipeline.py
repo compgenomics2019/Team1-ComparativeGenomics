@@ -5,6 +5,34 @@ import subprocess
 import sys
 import pandas as pd
 import createDiffMatrix
+def kchoose(Kchooser):
+    # Opens Kchooser.report to find optimum k-mer value from Kchooser kSNP3 script 
+	dir_kc = os.getcwd()
+	file_hand = open('dir_kc/Kchooser.report', 'r')
+	k_val = 0
+	for i in file_hand:
+		if i.startswith('When'):
+			if int(i.split()[3]) > k_val:
+				k_val = int(i.split()[3])
+            
+	print("Your optimum k-mer length is: {}\n".format(k_val))
+	print("Review Kchooser.report for more details..")
+	
+	return(k_val)
+
+def kSNP3():
+    ## <subprocess for various utility commands>
+    ## Test in gabriel_
+    ## :)
+    
+def MASH():
+    ## Translate this into a script
+    '''
+    first i did this: ./mash dist refseq.genomes.k21s1000.msh ../../functional_annotation/assembled_reads/{}_scaffolds.fasta > distances_{}.tab
+    replacing  the “{}” with the number for the input file
+    then i did sort -gk3 distances_{}.tab | head -n1 >> strains_file.txt
+    '''
+
 def calDifference(inFile):
     """ before calculate difference for output of cgMLST, the last two columns need to be cut
     the output will be on the inFile """
