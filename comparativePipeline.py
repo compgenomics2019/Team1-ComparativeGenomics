@@ -18,25 +18,32 @@ def kSNP3(inFile, outDir):
 	
     kCHOOSE_r = "Kchooser {}.fasta".format(file_head)
 
+    # Parse Kchooser.report for optimal k-value
     dir_kc = os.getcwd()
     file_hand = open('dir_kc/Kchooser.report', 'r')
     k_val = 0
     for i in file_hand:
         if i.startswith('When'):
-            if int(i.split()[3]) > k_val:
-                k_val = int(i.split()[3])
+            k_val = int(i.split()[3])
     print("Your optimum k-mer length is: {}\n".format(k_val))
     print("Review Kchooser.report for more details..")
 	
-    ## kSNP3
+    k_script = "kSNP3 -in {}_infile -outdir {} -k {} -ML | tee {}_log".format(file_head, fileOut, k_val, file_head)
+
+    subprocess.call(k_script, shell=True)
+
+
+
 	
-def MASH():
+def MASH(inFile):
     ## Translate this into a script
-    '''
-    first i did this: ./mash dist refseq.genomes.k21s1000.msh ../../functional_annotation/assembled_reads/{}_scaffolds.fasta > distances_{}.tab
-    replacing  the “{}” with the number for the input file
-    then i did sort -gk3 distances_{}.tab | head -n1 >> strains_file.txt
-    '''
+    input_path = os.path.abspath(inFile)
+    for file in os.listdir(input_path):
+        mash_cmd = "mash dist refseq.genomes.k21s1000.msh {} > distances_{}.tab".format(file, file.split('.')[0])
+	subprocess.call(mash_cmd, shell=True)
+    
+        mash_out = "sort -gk3 distances_{}.tab | head -n1 >> strains_file.txt"/format(file.split('.')[0])
+        subprocess.call(mash_out, shell=True)
 
 def calDifference(inFile):
     """ before calculate difference for output of cgMLST, the last two columns need to be cut
@@ -66,6 +73,7 @@ def main():
     parser.add_argument("-o", "--outFile" ,help="path of output file/directory") 
     parser.add_argument("-db", "--database", help="path of database for cgMLST ") 
     parser.add_argument("-k", "--ksnp", action="store_true", help="running kSNP3")
+    parser.add_argument("-mash", action="store_true", help="Run MASH distance on genomes")
     args = parser.parse_args()
     if args.mlst:
         if args.database == None:
@@ -86,5 +94,10 @@ def main():
 	if args.outFile==None:
 	    raise SystemExit("Please specify an output directory")
 	kSNP3(args.inFile, args.outFile)
+	
+    if args.mash:
+        if args.inFile==None:
+            raise SystemExit("Please specify an input directory containing your genomes of analysis")
+	MASH(args.inFile)
 if __name__ == "__main__":
     main()
